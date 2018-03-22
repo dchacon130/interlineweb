@@ -1,0 +1,35 @@
+{% extends "partials/basic_template.twig" %}
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Ciudad</th>
+            <th>Nombre Producto</th>
+            <th>Causal</th>
+            <th>Número Precinto</th>
+            <th>Fecha Certificación</th>
+            <th>Número Lote</th>
+            <th>Cod Producto</th>
+            <th>Detalle Cod Cliente</th>
+            <th>Nit</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for m in model %}
+            <tr>
+                <td>{{ m.nombre }}</td>
+                <td>{{ m.ciudad }}</td>
+                <td>{{ m.nombreProducto }}</td>
+                <td>{{ m.Causal }}</td>
+                <td>{{ m.numeroPrecinto }}</td>
+                <td>{{ m.fechaCertificacion }}</td>
+                <td>{{ m.numeroLote }}</td>
+                <td>{{ m.codigoProducto }}</td>
+                <td>{{ m.detalleCodigoCliente }}</td>
+                <td>{{ m.nit }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

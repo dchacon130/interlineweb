@@ -1,0 +1,76 @@
+{% extends "partials/layout.twig" %}
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ 'cliente/exportar'|url }}" class="btn btn-primary pull-right mg-right"><i class="fa fa-download"></i> Exportar</a>
+        Clientes
+    </h1>
+
+    <ol class="breadcrumb">
+        <li class="active">Clientes</li>
+    </ol>
+
+    <div id="grid"></div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            var data = {
+                class: 'table-striped table-bordered table-condensed table-hover',
+                columnas: [
+                    { leyenda: 'Documeto', class: '', ordenable: true, columna: 'documento' },
+                    { leyenda: 'Factura', class: '', ordenable: true, columna: 'factura' },
+                    { leyenda: 'Fecha Documento', class: '', ordenable: true, columna: 'fecha_documento' },
+                    { leyenda: 'Saldo', class: '', ordenable: true, columna: 'saldo' },
+                    { leyenda: 'Consecutivo', class: '', ordenable: true, columna: 'consecutivo' },
+                    { leyenda: 'Tipo Pago', class: '', ordenable: true, columna: 'tipo_pago_recaudo' },
+                    { leyenda: 'Número Cuenta', class: '', ordenable: true, columna: 'numero_cuenta' },
+                    { leyenda: 'Tipo Banco', class: '', ordenable: true, columna: 'tipo_banco_recaudo' },
+                    { leyenda: 'Código Cuenta', class: '', ordenable: true, columna: 'codigo_cuenta' },
+                    { leyenda: 'Fecha Pago', class: '', ordenable: true, columna: 'fecha_pago' },
+                    { leyenda: 'Valor Pago', class: '', ordenable: true, columna: 'valor_pago' },
+                    { leyenda: 'Tipo Descuento', class: '', ordenable: true, columna: 'tipo_descuento_recaudo' },
+                    { leyenda: 'Valor Descuento', class: '', ordenable: true, columna: 'valor_descuento' },
+                    { leyenda: 'Observaciones', class: '', ordenable: true, columna: 'observaciones' }
+                ],
+                modelo: [
+                    { propiedad: 'documento'},
+                    { propiedad: 'factura' },
+                    { propiedad: 'fecha_documento' },
+                    { propiedad: 'saldo' },
+                    { propiedad: 'consecutivo' },
+                    { propiedad: 'tipo_pago_recaudo' },
+                    { propiedad: 'numero_cuenta' },
+                    { propiedad: 'tipo_banco_recaudo' },
+                    { propiedad: 'codigo_cuenta' },
+                    { propiedad: 'fecha_pago' },
+                    { propiedad: 'valor_pago' },
+                    { propiedad: 'tipo_descuento_recaudo' },
+                    { propiedad: 'valor_descuento' },
+                    { propiedad: 'observaciones' },
+                ],
+                url: '{{ 'cliente/grid'|url }}',
+                paginable: true,
+                limite: [20, 60, 100],
+                columna: 'id',
+                columna_orden: 'desc'
+            };
+
+            var grid = $("#grid").anexGrid(data);
+
+            grid.tabla().on('click', '.btn-eliminar', function(){
+                var obj = $(this);
+                obj.attr('disabled', true);
+
+                $.post(base_url('cliente/eliminar'), {
+                    id: obj.val()
+                }, function(r){
+                    if(r.response){
+                        grid.refrescar();
+                    } else {
+                        alert(r.message);
+                    }
+                }, 'json')
+            })
+        })
+    </script>
+{% endblock %}

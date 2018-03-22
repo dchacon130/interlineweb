@@ -1,0 +1,90 @@
+{% extends "partials/layout.twig" %}
+{% block content %}
+    <h1 class="page-header">
+        Rotación de productos por mes
+    </h1>
+
+    <div class="well well-sm">
+        <div class="row">
+            <div class="col-xs-5">
+                <select id="anio" class="form-control">
+                    <option value="2016">2016</option>
+                </select>
+            </div>
+            <div class="col-xs-5">
+                <select id="mes" class="form-control">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Setiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div class="col-xs-2">
+                <button id="btn-filtrar" type="button" class="btn btn-primary btn-block">
+                    <i class="fa fa-filter"></i> Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid"></div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            $("#btn-filtrar").click(function(){
+                cargarGrilla(
+                    $("#anio").val(),
+                    $("#mes").val()
+                );
+            })
+
+            cargarGrilla(
+                $("#anio").val(),
+                $("#mes").val()
+            );
+        })
+
+        function cargarGrilla(y,m){
+            var data = {
+                class: 'table-striped table-bordered table-condensed table-hover',
+                columnas: [
+                    { leyenda: 'Comprobante', ordenable: true, columna: 'id', style: 'width:140px' },
+                    { leyenda: 'Producto', ordenable: true, columna: 'producto' },
+                    { leyenda: 'Costo', class: 'text-right', ordenable: true, columna: 'costo' },
+                    { leyenda: 'Ingreso', class: 'text-right', ordenable: true, columna: 'total' },
+                    { leyenda: 'Utilidad', class: 'text-right', ordenable: true, columna: 'utilidad' }
+                ],
+                modelo: [
+                    { propiedad: 'id', formato: function(tr, obj, valor){
+                        return '#' + valor.padLeft(6);
+                    }},
+                    { propiedad: 'producto' },
+                    { propiedad: 'costo', class: 'text-right', formato: function(tr, obj, valor){
+                        return parseFloat(valor).format(2);
+                    }},
+                    { propiedad: 'total', class: 'text-right', formato: function(tr, obj, valor){
+                        return parseFloat(valor).format(2);
+                    }},
+                    { propiedad: 'utilidad', class: 'text-right', formato: function(tr, obj, valor){
+                        return parseFloat(valor).format(2);
+                    }},
+                ],
+                url: '{{ 'reporte/productos_grid'|url }}/' + y + '/' + m,
+                paginable: true,
+                limite: [20, 60, 100],
+                columna: 'anio',
+                columna_orden: 'desc'
+            };
+            var grid = $("#grid").anexGrid(data);
+        }
+    </script>
+{% endblock %}

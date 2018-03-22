@@ -1,0 +1,79 @@
+{% extends "partials/layout.twig" %}
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ 'producto/exportar'|url }}" class="btn btn-primary pull-right mg-right"><i class="fa fa-download"></i> Exportar</a>
+        Devoluciones
+    </h1>
+
+    <ol class="breadcrumb">
+        <li class="active">Devoluciones</li>
+    </ol>
+
+    <div id="grid"></div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            var data = {
+                class: 'table-striped table-bordered table-condensed table-hover',
+                columnas: [
+                    { style: 'width:60px;' },
+                    { leyenda: 'Nombre', class: '', ordenable: true, columna: 'nombre' },
+                    { leyenda: 'Marca', class: '', ordenable: true, columna: 'marca' },
+                    { leyenda: 'Costo', class: '', ordenable: true, columna: 'costo' },
+                    { leyenda: 'Precio', class: '', ordenable: true, columna: 'precio' },
+                    { style: 'width:40px;' }
+                ],
+                modelo: [
+                    { propiedad: 'foto', formato: function(tr, obj, valor){
+                        if(valor == null) return;
+                        return '<img src="' + base_url('public/' + valor) + '" class="img-responsive" />';
+                    }},
+                    { propiedad: 'nombre', formato: function(tr, obj, valor){
+                        return anexGrid_link({
+                            href: '{{ 'producto/crud/'|url }}' + obj.id,
+                            contenido: valor
+                        });
+                    }},
+                    { propiedad: 'marca' },
+                    { propiedad: 'costo', class: 'text-right', formato: function(tr, obj, value){
+                        return 'USD ' + value;
+                    } },
+                    { propiedad: 'precio', class: 'text-right', formato: function(tr, obj, value){
+                        return 'USD ' + value;
+                    } }
+                    { propiedad: 'id', formato: function(tr, obj, valor){
+                        return anexGrid_boton({
+                            type: 'button',
+                            class: 'btn btn-xs btn-danger btn-block btn-eliminar',
+                            value: valor,
+                            contenido: '<i class="fa fa-trash"></i>'
+                        });
+                    }},
+                ],
+                url: '{{ 'producto/grid'|url }}',
+                paginable: true,
+                limite: [20, 60, 100],
+                columna: 'id',
+                columna_orden: 'desc'
+            };
+
+            var grid = $("#grid").anexGrid(data);
+
+            grid.tabla().on('click', '.btn-eliminar', function(){
+                var obj = $(this);
+                obj.attr('disabled', true);
+
+                $.post(base_url('producto/eliminar'), {
+                    id: obj.val()
+                }, function(r){
+                    if(r.response){
+                        grid.refrescar();
+                    } else {
+                        alert(r.message);
+                    }
+                }, 'json')
+            })
+        })
+    </script>
+{% endblock %}

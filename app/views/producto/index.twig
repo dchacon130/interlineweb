@@ -1,0 +1,69 @@
+{% extends "partials/layout.twig" %}
+{% block content %}
+    <h1 class="page-header">
+        <a href="{{ 'producto/exportar'|url }}" class="btn btn-primary pull-right mg-right"><i class="fa fa-download"></i> Exportar</a>
+        Devoluciones
+    </h1>
+
+    <ol class="breadcrumb">
+        <li class="active">Devoluciones</li>
+    </ol>
+
+    <div id="grid"></div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        $(document).ready(function(){
+            var data = {
+                class: 'table-striped table-bordered table-condensed table-hover',
+                columnas: [
+                    { leyenda: 'Nombre', class: '', ordenable: true, columna: 'nombre' },
+                    { leyenda: 'Ciudad', class: '', ordenable: true, columna: 'ciudad' },
+                    { leyenda: 'Nombre Producto', class: '', ordenable: true, columna: 'nombreProducto' },
+                    { leyenda: 'Causal', class: '', ordenable: true, columna: 'Causal' },
+                    { leyenda: 'Número Precinto', class: '', ordenable: true, columna: 'numeroPrecinto' },
+                    { leyenda: 'Fecha Certificación', class: '', ordenable: true, columna: 'fechaCertificacion' },
+                    { leyenda: 'Número Lote', class: '', ordenable: true, columna: 'numeroLote' },
+                    { leyenda: 'Cod Producto', class: '', ordenable: true, columna: 'codigoProducto' },
+                    { leyenda: 'Detalle Cod Cliente', class: '', ordenable: true, columna: 'detalleCodigoCliente' },
+                    { leyenda: 'Nit', class: '', ordenable: true, columna: 'nit' },
+                ],
+                modelo: [
+                    { propiedad: 'nombre' },
+                    { propiedad: 'ciudad' },
+                    { propiedad: 'nombreProducto' },
+                    { propiedad: 'Causal' },
+                    { propiedad: 'numeroPrecinto' },
+                    { propiedad: 'fechaCertificacion' },
+                    { propiedad: 'numeroLote' },
+                    { propiedad: 'codigoProducto' },
+                    { propiedad: 'detalleCodigoCliente' },
+                    { propiedad: 'nit' }
+                ],
+                url: '{{ 'producto/grid'|url }}',
+                paginable: true,
+                limite: [20, 60, 100],
+                columna: 'id',
+                columna_orden: 'desc'
+            };
+
+            var grid = $("#grid").anexGrid(data);
+
+            grid.tabla().on('click', '.btn-eliminar', function(){
+                var obj = $(this);
+                obj.attr('disabled', true);
+
+                $.post(base_url('producto/eliminar'), {
+                    id: obj.val()
+                }, function(r){
+                    if(r.response){
+                        grid.refrescar();
+                    } else {
+                        alert(r.message);
+                    }
+                }, 'json')
+            })
+        })
+    </script>
+{% endblock %}

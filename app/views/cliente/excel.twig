@@ -1,0 +1,43 @@
+{% extends "partials/basic_template.twig" %}
+{% block content %}
+    <table>
+        <thead>
+        <tr>
+            <th>Documento</th>
+            <th>Factura</th>
+            <th>FechaDocumento</th>
+            <th>Saldo</th>
+            <th>Consecutivo</th>
+            <th>TipoPago</th>
+            <th>NúmeroCuenta</th>
+            <th>TipoBanco</th>
+            <th>CódigoCuenta</th>
+            <th>FechaPago</th>
+            <th>ValorPago</th>
+            <th>TipoDescuento</th>
+            <th>ValorDescuento</th>
+            <th>Observaciones</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for m in model %}
+            <tr>
+                <td>{{ m.documento }}</td>
+                <td>{{ m.factura }}</td>
+                <td>{{ m.fecha_documento }}</td>
+                <td>{{ m.saldo }}</td>
+                <td>{{ m.consecutivo }}</td>
+                <td>{{ m.tipo_pago_recaudo }}</td>
+                <td>{{ m.numero_cuenta }}</td>
+                <td>{{ m.tipo_banco_recaudo }}</td>
+                <td>{{ m.codigo_cuenta }}</td>
+                <td>{{ m.fecha_pago }}</td>
+                <td>{{ m.valor_pago }}</td>
+                <td>{{ m.tipo_descuento_recaudo }}</td>
+                <td>{{ m.valor_descuento }}</td>
+                <td>{{ m.observaciones }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
